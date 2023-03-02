@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:get/get.dart';
+import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:sizer/sizer.dart';
 
 import '../controllers/login_controller.dart';
@@ -45,20 +46,23 @@ class LoginView extends GetView<LoginController> {
                   controller: controller.emailController,
                   title: '',
                   hintText: 'Enter your email',
+                  textInputAction: TextInputAction.next,
                 ),
                 SizedBox(height: 3.h),
                 CustomTextField(
-                  controller: controller.emailController,
+                  controller: controller.passwordController,
                   title: '',
                   hintText: 'Enter your password',
+                  textInputAction: TextInputAction.done,
                   isPassword: true,
                 ),
                 SizedBox(height: 3.h),
-                CustomButton(
-                  title: 'Log In',
-                  onPressed: () {
-                    Get.toNamed(Routes.MAIN);
-                  },
+                Obx(
+                  () => CustomButton(
+                    isLoading: controller.isLoading.value,
+                    title: 'Log In',
+                    onPressed: controller.validateLoginForm,
+                  ),
                 ),
                 SizedBox(height: 3.h),
                 Row(

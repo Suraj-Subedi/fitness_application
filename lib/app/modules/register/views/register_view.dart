@@ -2,10 +2,12 @@ import 'package:fitness_app/app/components/custom_textButton.dart';
 import 'package:fitness_app/app/components/custom_textfield.dart';
 import 'package:fitness_app/app/routes/app_pages.dart';
 import 'package:fitness_app/app/utils/assets.dart';
+import 'package:fitness_app/app/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:sizer/sizer.dart';
 
 import '../controllers/register_controller.dart';
@@ -37,33 +39,68 @@ class RegisterView extends GetView<RegisterController> {
                 ),
                 SizedBox(height: 1.h),
                 CustomTextField(
-                  controller: controller.emailController,
+                  controller: controller.nameController,
                   title: '',
                   hintText: 'Full Name',
+                  textInputAction: TextInputAction.next,
                 ),
                 SizedBox(height: 3.h),
                 CustomTextField(
                   controller: controller.emailController,
                   title: '',
                   hintText: 'Enter your email',
+                  textInputAction: TextInputAction.next,
                 ),
                 SizedBox(height: 3.h),
                 CustomTextField(
-                  controller: controller.emailController,
+                  controller: controller.birthdateController,
                   title: '',
+                  readOnly: true,
                   hintText: 'Your birthdate',
+                  textInputAction: TextInputAction.next,
+                  suffixIcon: GestureDetector(
+                    onTap: () async {
+                      showDatePicker(
+                              context: context,
+                              initialDate: DateTime(2000),
+                              firstDate: DateTime(1920),
+                              lastDate: DateTime.now())
+                          .then((v) => {
+                                {
+                                  if (v != null)
+                                    {
+                                      controller.birthdateController.text =
+                                          getFormattedDate(v),
+                                      FocusScope.of(context).nextFocus()
+                                    }
+                                }
+                              });
+                    },
+                    child: const Icon(
+                      Icons.calendar_today,
+                    ),
+                  ),
                 ),
                 SizedBox(height: 3.h),
                 CustomTextField(
-                  controller: controller.emailController,
+                  controller: controller.weightController,
                   title: '',
                   hintText: 'Enter your weight',
+                  textInputAction: TextInputAction.next,
+                  suffix: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: const [
+                      Text('KG'),
+                    ],
+                  ),
+                  keyboardType: TextInputType.numberWithOptions(decimal: true),
                 ),
                 SizedBox(height: 3.h),
                 CustomTextField(
-                  controller: controller.emailController,
+                  controller: controller.passwordController,
                   title: '',
                   hintText: 'Enter your password',
+                  textInputAction: TextInputAction.done,
                   isPassword: true,
                 ),
                 SizedBox(height: 3.h),

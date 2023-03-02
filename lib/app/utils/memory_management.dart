@@ -1,3 +1,4 @@
+import 'package:jwt_decode/jwt_decode.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MemoryManagement {
@@ -18,6 +19,10 @@ class MemoryManagement {
 
   static void removeAccessToken() async {
     await prefs!.remove(SharedPrefsKeys.ACCESS_TOKEN);
+  }
+
+  static String? getUserId() {
+    return Jwt.parseJwt(prefs!.getString(SharedPrefsKeys.ACCESS_TOKEN)!)['id'];
   }
 
   static String? getAccessToken() {
@@ -56,4 +61,5 @@ class SharedPrefsKeys {
 // ignore: constant_identifier_names
   static const String LOGIN_STATUS = 'login_status';
 // ignore: constant_identifier_names
+  static const String USER_ID = 'user_id';
 }

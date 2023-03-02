@@ -13,9 +13,9 @@ import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import 'package:sizer/sizer.dart';
 
 class MainController extends GetxController {
-  //TODO: Implement MainController
-
   final count = 0.obs;
+
+  Rx<bool> autofocus = false.obs;
 
   PersistentTabController persistentTabController =
       PersistentTabController(initialIndex: 0);
@@ -26,16 +26,16 @@ class MainController extends GetxController {
       fontSize: 12.sp);
 
   final screens = [
-    HomeView(),
-    SearchView(),
-    FavouriteView(),
-    ProfileView(),
+    const HomeView(),
+    const SearchView(),
+    const FavouriteView(),
+    const ProfileView(),
   ];
 
   List<PersistentBottomNavBarItem> navBarsItems() {
     double iconHeight = 17.sp;
     Color activeColor = Colors.white;
-    Color inactiveColor = primaryColor;
+    Color inactiveColor = Colors.black;
     // double inactiveHeight = isMobile() ? 20.sp : 15.sp;
 
     return [

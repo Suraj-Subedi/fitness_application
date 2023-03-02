@@ -1,3 +1,8 @@
+import 'package:fitness_app/app/models/api_response.dart';
+import 'package:fitness_app/app/models/user.dart';
+import 'package:fitness_app/app/routes/app_pages.dart';
+import 'package:fitness_app/app/utils/constants.dart';
+import 'package:fitness_app/app/utils/memory_management.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -9,10 +14,14 @@ class ProfileController extends GetxController {
   final TextEditingController birthDateController = TextEditingController();
   final TextEditingController weightController = TextEditingController();
 
+  Rx<User>? user;
+
   final count = 0.obs;
+
   @override
-  void onInit() {
+  void onInit() async {
     super.onInit();
+    await getUserData();
   }
 
   @override
@@ -26,4 +35,22 @@ class ProfileController extends GetxController {
   }
 
   void increment() => count.value++;
+
+  Future<void> getUserData() async {
+    try {
+      var data = await services.getUserDetails();
+      if (data is ApiResponse) {
+      } else if (data is User) {
+        user = data.obs;
+        update(['profile']);
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  void onLogout() async {
+    await MemoryManagement.logOut();
+    Get.offAllNamed(Routes.MAIN);
+  }
 }

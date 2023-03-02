@@ -1,6 +1,7 @@
 import 'package:fitness_app/app/components/exercise_card.dart';
 import 'package:fitness_app/app/components/search_box.dart';
 import 'package:fitness_app/app/components/stat_tile.dart';
+import 'package:fitness_app/app/utils/assets.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
@@ -41,8 +42,8 @@ class HomeView extends GetView<HomeController> {
                   ),
                   CircleAvatar(
                     radius: 5.w,
-                    backgroundImage: NetworkImage(
-                      'https://scontent.fpkr1-1.fna.fbcdn.net/v/t39.30808-6/245114733_1996474163850896_439557353261802929_n.jpg?_nc_cat=105&ccb=1-7&_nc_sid=09cbfe&_nc_ohc=rv1panr1jI0AX9VKi1F&tn=uZeqT0FD48tekub-&_nc_ht=scontent.fpkr1-1.fna&oh=00_AfAsTkc_M0v15Q0C37805lZ4IjorK2OzP7DJQgs1rY4OQQ&oe=6403B335',
+                    backgroundImage: const NetworkImage(
+                      Assets.profileImage,
                     ),
                   ),
                 ],
@@ -50,7 +51,9 @@ class HomeView extends GetView<HomeController> {
               SizedBox(
                 height: 2.h,
               ),
-              SearchBox(),
+              const SearchBox(
+                ishome: true,
+              ),
               SizedBox(
                 height: 2.h,
               ),

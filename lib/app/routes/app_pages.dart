@@ -1,3 +1,4 @@
+import 'package:fitness_app/app/middlewares/auth_middleware.dart';
 import 'package:get/get.dart';
 
 import '../modules/favourite/bindings/favourite_binding.dart';
@@ -22,7 +23,7 @@ part 'app_routes.dart';
 class AppPages {
   AppPages._();
 
-  static const INITIAL = Routes.LOGIN;
+  static const INITIAL = Routes.MAIN;
 
   static final routes = [
     GetPage(
@@ -48,10 +49,10 @@ class AppPages {
       binding: RegisterBinding(),
     ),
     GetPage(
-      name: _Paths.MAIN,
-      page: () => const MainView(),
-      binding: MainBinding(),
-    ),
+        name: _Paths.MAIN,
+        page: () => const MainView(),
+        binding: MainBinding(),
+        middlewares: [AuthMiddleware()]),
     GetPage(
       name: _Paths.SEARCH,
       page: () => const SearchView(),

@@ -1,6 +1,8 @@
 import 'package:fitness_app/app/components/custom_textButton.dart';
 import 'package:fitness_app/app/components/custom_textfield.dart';
+import 'package:fitness_app/app/routes/app_pages.dart';
 import 'package:fitness_app/app/utils/assets.dart';
+import 'package:fitness_app/app/utils/constants.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
@@ -26,70 +28,90 @@ class ProfileView extends GetView<ProfileController> {
         ),
       ),
       body: SafeArea(
-        child: SingleChildScrollView(
-          child: Container(
-            padding: EdgeInsets.symmetric(
-              horizontal: 5.w,
-              vertical: 5.w,
-            ),
-            child: Column(
-              children: [
-                Center(
-                  child: CircleAvatar(
-                    backgroundImage: NetworkImage(
-                      Assets.profileImage,
-                    ),
-                    radius: 18.w,
+        child: GetBuilder<ProfileController>(
+            id: 'profile',
+            builder: (controller) {
+              if (controller.user == null) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+
+              var data = controller.user?.value.data;
+
+              return SingleChildScrollView(
+                child: Container(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 5.w,
+                    vertical: 5.w,
+                  ),
+                  child: Column(
+                    children: [
+                      Center(
+                        child: CircleAvatar(
+                          backgroundImage: const NetworkImage(
+                            Assets.profileImage,
+                          ),
+                          radius: 18.w,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 2.h,
+                      ),
+                      Text(
+                        data?.fullName ?? 'User',
+                        style: TextStyle(
+                          fontSize: 14.sp,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 1.h,
+                      ),
+                      CustomTextField(
+                          readOnly: true,
+                          title: '',
+                          hintText: 'Dev Joshi',
+                          controller: controller.nameController),
+                      SizedBox(
+                        height: 1.h,
+                      ),
+                      CustomTextField(
+                        readOnly: true,
+                        title: '',
+                        hintText: data?.email ?? '',
+                        controller: controller.emailController,
+                      ),
+                      SizedBox(
+                        height: 1.h,
+                      ),
+                      CustomTextField(
+                        readOnly: true,
+                        title: '',
+                        hintText: getFormattedDate(data!.birthDate!),
+                        controller: controller.birthDateController,
+                      ),
+                      SizedBox(
+                        height: 1.h,
+                      ),
+                      CustomTextField(
+                          readOnly: true,
+                          title: '',
+                          hintText: '${data.weight} KG',
+                          controller: controller.weightController),
+                      SizedBox(
+                        height: 1.h,
+                      ),
+                      CustomButton(
+                          title: 'Log Out',
+                          onPressed: () {
+                            controller.onLogout();
+                          }),
+                    ],
                   ),
                 ),
-                SizedBox(
-                  height: 2.h,
-                ),
-                Text(
-                  'John Doe',
-                  style: TextStyle(
-                    fontSize: 14.sp,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                SizedBox(
-                  height: 1.h,
-                ),
-                CustomTextField(
-                    title: '',
-                    hintText: 'Dev Joshi',
-                    controller: controller.nameController),
-                SizedBox(
-                  height: 1.h,
-                ),
-                CustomTextField(
-                  title: '',
-                  hintText: 'Dev@gmail.com',
-                  controller: controller.emailController,
-                ),
-                SizedBox(
-                  height: 1.h,
-                ),
-                CustomTextField(
-                  title: '',
-                  hintText: '1999-01-01',
-                  controller: controller.birthDateController,
-                ),
-                SizedBox(
-                  height: 1.h,
-                ),
-                CustomTextField(
-                    title: '',
-                    hintText: '80 KG',
-                    controller: controller.weightController),
-                SizedBox(
-                  height: 1.h,
-                ),
-                CustomButton(title: 'Log Out', onPressed: () {}),
-              ],
-            ),
-          ),
-        ),
+              );
+            }),
       ),
     );
   }

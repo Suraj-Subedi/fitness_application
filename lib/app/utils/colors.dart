@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-var primarColorCode = 0xFF2E3B62;
+var primarColorCode = Colors.blue.value;
 
 MaterialColor primaryColor = MaterialColor(
   primarColorCode, // 0% comes in here, this will be color picked if no shade is selected when defining a Color property which doesn’t require a swatch.

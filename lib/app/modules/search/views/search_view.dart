@@ -21,7 +21,9 @@ class SearchView extends GetView<SearchController> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SearchBox(),
+              const SearchBox(
+                isSearch: true,
+              ),
               SizedBox(
                 height: 2.h,
               ),

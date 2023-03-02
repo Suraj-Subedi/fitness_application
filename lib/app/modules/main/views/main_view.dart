@@ -16,6 +16,7 @@ class MainView extends GetView<MainController> {
       context,
 
       navBarHeight: 8.h,
+      controller: controller.persistentTabController,
 
       screens: controller.screens,
       items: controller.navBarsItems(),
