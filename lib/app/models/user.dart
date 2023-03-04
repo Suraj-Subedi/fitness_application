@@ -34,6 +34,7 @@ class User {
 
 class Data {
   Data({
+    this.haveFullAccess,
     this.id,
     this.email,
     this.fullName,
@@ -46,11 +47,12 @@ class Data {
     this.v,
   });
 
+  bool? haveFullAccess;
   String? id;
   String? email;
   String? fullName;
   DateTime? birthDate;
-  int? weight;
+  double? weight;
   List<dynamic>? favourites;
   bool? isAdmin;
   DateTime? createdAt;
@@ -58,13 +60,14 @@ class Data {
   int? v;
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
+        haveFullAccess: json["haveFullAccess"],
         id: json["_id"],
         email: json["email"],
         fullName: json["fullName"],
         birthDate: json["birthDate"] == null
             ? null
             : DateTime.parse(json["birthDate"]),
-        weight: json["weight"],
+        weight: json["weight"]?.toDouble(),
         favourites: json["favourites"] == null
             ? []
             : List<dynamic>.from(json["favourites"]!.map((x) => x)),
@@ -79,6 +82,7 @@ class Data {
       );
 
   Map<String, dynamic> toJson() => {
+        "haveFullAccess": haveFullAccess,
         "_id": id,
         "email": email,
         "fullName": fullName,

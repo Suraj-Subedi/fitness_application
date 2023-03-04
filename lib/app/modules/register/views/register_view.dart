@@ -2,6 +2,7 @@ import 'package:fitness_app/app/components/custom_textButton.dart';
 import 'package:fitness_app/app/components/custom_textfield.dart';
 import 'package:fitness_app/app/routes/app_pages.dart';
 import 'package:fitness_app/app/utils/assets.dart';
+import 'package:fitness_app/app/utils/colors.dart';
 import 'package:fitness_app/app/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -64,13 +65,23 @@ class RegisterView extends GetView<RegisterController> {
                               context: context,
                               initialDate: DateTime(2000),
                               firstDate: DateTime(1920),
+                              builder: (BuildContext context, Widget? child) {
+                                return Theme(
+                                  data: ThemeData.light().copyWith(
+                                    colorScheme: ColorScheme.light(
+                                      primary: darkBrown,
+                                    ),
+                                  ),
+                                  child: child!,
+                                );
+                              },
                               lastDate: DateTime.now())
                           .then((v) => {
                                 {
                                   if (v != null)
                                     {
                                       controller.birthdateController.text =
-                                          getFormattedDate(v),
+                                          getFormattedDate(v)!,
                                       FocusScope.of(context).nextFocus()
                                     }
                                 }
@@ -104,9 +115,14 @@ class RegisterView extends GetView<RegisterController> {
                   isPassword: true,
                 ),
                 SizedBox(height: 3.h),
-                CustomButton(
-                  title: 'Register',
-                  onPressed: () {},
+                Obx(
+                  () => CustomButton(
+                    isLoading: controller.isLoading.value,
+                    title: 'Register',
+                    onPressed: () {
+                      controller.validateRegisterForm();
+                    },
+                  ),
                 ),
                 SizedBox(height: 3.h),
                 Row(

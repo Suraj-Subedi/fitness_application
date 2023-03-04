@@ -2,6 +2,7 @@
 
 import 'package:fitness_app/app/modules/favourite/views/favourite_view.dart';
 import 'package:fitness_app/app/modules/home/views/home_view.dart';
+import 'package:fitness_app/app/modules/profile/controllers/profile_controller.dart';
 import 'package:fitness_app/app/modules/profile/views/profile_view.dart';
 import 'package:fitness_app/app/modules/search/views/search_view.dart';
 import 'package:fitness_app/app/utils/assets.dart';
@@ -108,6 +109,7 @@ class MainController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    Get.put(ProfileController());
   }
 
   @override

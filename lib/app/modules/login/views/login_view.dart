@@ -7,6 +7,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:get/get.dart';
 import 'package:get/get_connect/http/src/utils/utils.dart';
+import 'package:lottie/lottie.dart';
 import 'package:sizer/sizer.dart';
 
 import '../controllers/login_controller.dart';
@@ -26,7 +27,7 @@ class LoginView extends GetView<LoginController> {
                 SizedBox(
                   width: 100.w,
                   height: 70.w,
-                  child: SvgPicture.asset(Assets.loginDoodle),
+                  child: Lottie.asset(Assets.loginLottieDoodle),
                 ),
                 SizedBox(height: 5.h),
                 Row(

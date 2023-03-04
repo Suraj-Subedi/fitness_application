@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart' as d;
 import 'package:dio/dio.dart';
 import 'package:fitness_app/app/models/api_response.dart';
+import 'package:fitness_app/app/models/exercises.dart';
 import 'package:fitness_app/app/models/user.dart';
 import 'package:fitness_app/app/network/api_endpoints.dart';
 import 'package:fitness_app/app/network/api_handler.dart';
@@ -10,7 +11,8 @@ import 'package:fitness_app/app/utils/memory_management.dart';
 class AppServices implements Services {
   @override
   Future getUserDetails() async {
-    final res = await ApiHandler.hitApi(dio.get(APIs.getUserDetails));
+    final res = await ApiHandler.hitApi(
+        dio.get(APIs.getUserDetails + MemoryManagement.getUserId()!));
     if (res is Response && res.statusCode == 200) {
       return User.fromJson(res.data);
     } else {
@@ -44,5 +46,63 @@ class AppServices implements Services {
       required String name,
       required String birthdate,
       required double weight,
-      required String password}) async {}
+      required String password}) async {
+    final res = await ApiHandler.hitApi(dio.post(APIs.register, data: {
+      "email": email,
+      "fullName": name,
+      "birthDate": birthdate,
+      "weight": weight,
+      "password": password,
+    }));
+
+    if (res is Response && res.statusCode == 201) {
+      return ApiResponse(
+          isSucces: true, message: 'User registered successfully!');
+    } else {
+      return ApiResponse(isSucces: false, message: 'Something went wrong');
+    }
+  }
+
+  @override
+  Future getExercises() async {
+    final res = await ApiHandler.hitApi(dio.get(APIs.exercises));
+    if (res is Response && res.statusCode == 200) {
+      return Exercises.fromJson(res.data);
+    } else {
+      return ApiResponse(isSucces: false, message: 'Something went wrong');
+    }
+  }
+
+  @override
+  Future updateUserDetails(
+      {required String name,
+      required String birthdate,
+      required double weight}) async {
+    final res = await ApiHandler.hitApi(
+        dio.put(APIs.updateUserDetails + MemoryManagement.getUserId()!, data: {
+      "fullName": name,
+      "birthDate": birthdate,
+      "weight": weight,
+    }));
+
+    if (res is Response && res.statusCode == 200) {
+      return ApiResponse(isSucces: true, message: 'User updated Successfully');
+    } else {
+      return ApiResponse(
+          isSucces: false,
+          message: res.data['message'] ?? 'Something went wrong');
+    }
+  }
+
+  @override
+  Future addToFavourites({required String exerciseId}) {
+    // TODO: implement addToFavourites
+    throw UnimplementedError();
+  }
+
+  @override
+  Future removeFromFavourites({required String exerciseId}) {
+    // TODO: implement removeFromFavourites
+    throw UnimplementedError();
+  }
 }

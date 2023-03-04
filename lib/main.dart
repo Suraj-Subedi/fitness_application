@@ -21,6 +21,7 @@ void main() async {
         title: "Application",
         initialRoute: AppPages.INITIAL,
         getPages: AppPages.routes,
+        defaultTransition: Transition.cupertino,
         theme: lightTheme,
       ),
     ),

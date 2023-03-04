@@ -7,4 +7,13 @@ abstract class Services {
       required double weight,
       required String password});
   Future getUserDetails();
+  Future updateUserDetails({
+    required String name,
+    required String birthdate,
+    required double weight,
+  });
+  Future getExercises();
+
+  Future addToFavourites({required String exerciseId});
+  Future removeFromFavourites({required String exerciseId});
 }

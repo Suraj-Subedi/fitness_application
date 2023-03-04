@@ -1,7 +1,10 @@
 import 'package:fitness_app/app/components/exercise_card.dart';
 import 'package:fitness_app/app/components/search_box.dart';
 import 'package:fitness_app/app/components/stat_tile.dart';
+import 'package:fitness_app/app/modules/main/controllers/main_controller.dart';
+import 'package:fitness_app/app/modules/profile/controllers/profile_controller.dart';
 import 'package:fitness_app/app/utils/assets.dart';
+import 'package:fitness_app/app/utils/constants.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
@@ -13,9 +16,12 @@ class HomeView extends GetView<HomeController> {
   const HomeView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
+    var controller = Get.put(HomeController());
+    var mainController = Get.find<MainController>();
     return Scaffold(
       body: SafeArea(
           child: SingleChildScrollView(
+        physics: const BouncingScrollPhysics(),
         child: Padding(
           padding: EdgeInsets.symmetric(
             horizontal: 5.w,
@@ -30,7 +36,8 @@ class HomeView extends GetView<HomeController> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Hello Dave'),
+                      Text(
+                          'Hello ${controller.profileController.user?.value.data?.fullName}'),
                       Text(
                         'Lets Workout',
                         style: TextStyle(
@@ -40,10 +47,23 @@ class HomeView extends GetView<HomeController> {
                       ),
                     ],
                   ),
-                  CircleAvatar(
-                    radius: 5.w,
-                    backgroundImage: const NetworkImage(
-                      Assets.profileImage,
+                  GestureDetector(
+                    onTap: () {
+                      mainController.persistentTabController.jumpToTab(3);
+                    },
+                    child: GetBuilder<ProfileController>(
+                      id: 'profile',
+                      builder: (controller) {
+                        return CircleAvatar(
+                          backgroundColor: Colors.white,
+                          radius: 5.w,
+                          backgroundImage: NetworkImage(
+                            getAvatar(
+                                name: controller.user?.value.data?.fullName ??
+                                    ''),
+                          ),
+                        );
+                      },
                     ),
                   ),
                 ],
@@ -94,14 +114,40 @@ class HomeView extends GetView<HomeController> {
               SizedBox(
                 height: 2.h,
               ),
-              ListView.builder(
-                physics: NeverScrollableScrollPhysics(),
-                shrinkWrap: true,
-                itemCount: 3,
-                itemBuilder: (context, index) {
-                  return ExerciseCard();
-                },
-              ),
+              GetBuilder<HomeController>(
+                  id: 'exercises',
+                  builder: (controller) {
+                    if (controller.exercises == null) {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
+
+                    if (controller.exercises!.value.data!.isEmpty) {
+                      return const Center(
+                        child: Text('No Exercises Found'),
+                      );
+                    }
+                    return SizedBox(
+                      height: 92.h,
+                      child: ListView.builder(
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: controller.exercises!.value.data!.length,
+                        itemBuilder: (context, index) {
+                          return Padding(
+                            padding: EdgeInsets.only(
+                              bottom: 5.w,
+                            ),
+                            child: ExerciseCard(
+                              isFavorite: true,
+                              exercise:
+                                  controller.exercises!.value.data![index],
+                            ),
+                          );
+                        },
+                      ),
+                    );
+                  }),
             ],
           ),
         ),

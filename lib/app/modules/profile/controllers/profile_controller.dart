@@ -42,10 +42,21 @@ class ProfileController extends GetxController {
       if (data is ApiResponse) {
       } else if (data is User) {
         user = data.obs;
+        mapUserData();
         update(['profile']);
       }
     } catch (e) {
       print(e);
+    }
+  }
+
+  void mapUserData() {
+    if (user != null) {
+      nameController.text = user?.value.data?.fullName ?? '';
+      emailController.text = user?.value.data?.email ?? '';
+      birthDateController.text =
+          getFormattedDate(user?.value.data?.birthDate ?? DateTime.now())!;
+      weightController.text = user!.value.data!.weight.toString();
     }
   }
 

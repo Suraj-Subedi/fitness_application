@@ -4,6 +4,9 @@ class Assets {
   static const searchIcon = 'assets/images/search_icon.svg';
   static const favouriteIcon = 'assets/images/favourite_icon.svg';
   static const profileIcon = 'assets/images/profile_icon.svg';
+  static const loginLottieDoodle = 'assets/lottie/login_doodle.json';
+  static const clockLottie = 'assets/lottie/clock.json';
+  static const notFoundLottie = 'assets/lottie/not_found.json';
 
   /// Test files only, to be removed
 

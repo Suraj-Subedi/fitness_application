@@ -48,11 +48,13 @@ class ProfileView extends GetView<ProfileController> {
                   child: Column(
                     children: [
                       Center(
-                        child: CircleAvatar(
-                          backgroundImage: const NetworkImage(
-                            Assets.profileImage,
+                        child: Hero(
+                          tag: 'profilePic',
+                          child: CircleAvatar(
+                            backgroundImage: NetworkImage(
+                                getAvatar(name: data?.fullName ?? 'User')),
+                            radius: 18.w,
                           ),
-                          radius: 18.w,
                         ),
                       ),
                       SizedBox(
@@ -65,13 +67,23 @@ class ProfileView extends GetView<ProfileController> {
                           fontWeight: FontWeight.w600,
                         ),
                       ),
+                      TextButton(
+                        onPressed: () async {
+                          await Get.toNamed(Routes.EDIT_PROFILE,
+                              arguments: data);
+                        },
+                        child: const Text(
+                          'Edit Profile',
+                          style: TextStyle(color: Colors.blue),
+                        ),
+                      ),
                       SizedBox(
-                        height: 1.h,
+                        height: 2.h,
                       ),
                       CustomTextField(
                           readOnly: true,
                           title: '',
-                          hintText: 'Dev Joshi',
+                          hintText: '',
                           controller: controller.nameController),
                       SizedBox(
                         height: 1.h,
@@ -88,7 +100,7 @@ class ProfileView extends GetView<ProfileController> {
                       CustomTextField(
                         readOnly: true,
                         title: '',
-                        hintText: getFormattedDate(data!.birthDate!),
+                        hintText: getFormattedDate(data?.birthDate) ?? '',
                         controller: controller.birthDateController,
                       ),
                       SizedBox(
@@ -97,7 +109,7 @@ class ProfileView extends GetView<ProfileController> {
                       CustomTextField(
                           readOnly: true,
                           title: '',
-                          hintText: '${data.weight} KG',
+                          hintText: '${data?.weight} KG',
                           controller: controller.weightController),
                       SizedBox(
                         height: 1.h,

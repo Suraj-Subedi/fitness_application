@@ -1,3 +1,5 @@
+// ignore_for_file: constant_identifier_names
+
 import 'package:jwt_decode/jwt_decode.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -45,6 +47,33 @@ class MemoryManagement {
     }
   }
 
+  static Future<void> setRecentSearches(
+      {required List<String> searches}) async {
+    await prefs!.setStringList(SharedPrefsKeys.RECENT_SEARCHES, searches);
+  }
+
+  static List<String>? getRecentSearches() {
+    return prefs!.getStringList(SharedPrefsKeys.RECENT_SEARCHES);
+  }
+
+  static Future<void> addRecentSearch({required String search}) async {
+    List<String>? searches = getRecentSearches();
+    searches ??= [];
+    searches.add(search);
+    await setRecentSearches(searches: searches);
+  }
+
+  static Future<void> removeRecentSearch({required String search}) async {
+    List<String>? searches = getRecentSearches();
+    searches ??= [];
+    searches.remove(search);
+    await setRecentSearches(searches: searches);
+  }
+
+  static Future<void> clearRecentSearches() async {
+    await prefs!.remove(SharedPrefsKeys.RECENT_SEARCHES);
+  }
+
   static Future<void> clearMemory() async {
     await prefs!.clear();
   }
@@ -56,10 +85,8 @@ class MemoryManagement {
 }
 
 class SharedPrefsKeys {
-// ignore: constant_identifier_names
   static const String ACCESS_TOKEN = 'access_token';
-// ignore: constant_identifier_names
   static const String LOGIN_STATUS = 'login_status';
-// ignore: constant_identifier_names
   static const String USER_ID = 'user_id';
+  static const String RECENT_SEARCHES = 'recent_searches';
 }

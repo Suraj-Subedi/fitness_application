@@ -1,4 +1,6 @@
 import 'package:fitness_app/app/components/exercise_card.dart';
+import 'package:fitness_app/app/modules/home/controllers/home_controller.dart';
+import 'package:fitness_app/app/modules/profile/controllers/profile_controller.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
@@ -10,6 +12,8 @@ class FavouriteView extends GetView<FavouriteController> {
   const FavouriteView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
+    var profileController = Get.put(ProfileController());
+    var homeController = Get.put(HomeController());
     return Scaffold(
         body: SafeArea(
       child: Padding(
@@ -33,16 +37,11 @@ class FavouriteView extends GetView<FavouriteController> {
               SizedBox(
                 height: 90.h,
                 child: ListView.builder(
-                  itemCount: 10,
+                  itemCount: homeController.favouritesExercises!.value.length,
                   itemBuilder: (context, index) {
-                    return Padding(
-                      padding: EdgeInsets.only(
-                        bottom: 5.w,
-                      ),
-                      child: const ExerciseCard(
-                        isFavorite: true,
-                      ),
-                    );
+                    return ExerciseCard(
+                        exercise:
+                            homeController.favouritesExercises!.value[index]);
                   },
                 ),
               ),

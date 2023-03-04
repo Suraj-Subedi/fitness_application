@@ -1,6 +1,10 @@
-import 'package:fitness_app/app/middlewares/auth_middleware.dart';
 import 'package:get/get.dart';
 
+import '../middlewares/auth_middleware.dart';
+import '../modules/detailed_exercise/bindings/detailed_exercise_binding.dart';
+import '../modules/detailed_exercise/views/detailed_exercise_view.dart';
+import '../modules/edit_profile/bindings/edit_profile_binding.dart';
+import '../modules/edit_profile/views/edit_profile_view.dart';
 import '../modules/favourite/bindings/favourite_binding.dart';
 import '../modules/favourite/views/favourite_view.dart';
 import '../modules/home/bindings/home_binding.dart';
@@ -67,6 +71,16 @@ class AppPages {
       name: _Paths.PROFILE,
       page: () => const ProfileView(),
       binding: ProfileBinding(),
+    ),
+    GetPage(
+      name: _Paths.EDIT_PROFILE,
+      page: () => const EditProfileView(),
+      binding: EditProfileBinding(),
+    ),
+    GetPage(
+      name: _Paths.DETAILED_EXERCISE,
+      page: () => const DetailedExerciseView(),
+      binding: DetailedExerciseBinding(),
     ),
   ];
 }
