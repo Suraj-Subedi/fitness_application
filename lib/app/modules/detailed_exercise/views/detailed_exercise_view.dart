@@ -1,7 +1,10 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:fitness_app/app/components/search_box.dart';
 import 'package:fitness_app/app/models/exercises.dart';
+import 'package:fitness_app/app/modules/home/controllers/home_controller.dart';
+import 'package:fitness_app/app/modules/profile/controllers/profile_controller.dart';
 import 'package:fitness_app/app/utils/assets.dart';
 import 'package:fitness_app/app/utils/colors.dart';
 import 'package:fitness_app/app/utils/constants.dart';
@@ -18,12 +21,56 @@ class DetailedExerciseView extends GetView<DetailedExerciseController> {
   @override
   Widget build(BuildContext context) {
     Exercise exercise = Get.arguments;
+    var profileController = Get.put(ProfileController());
     var steps = jsonDecode(exercise.steps!.first);
     return Scaffold(
         appBar: AppBar(
           backgroundColor: darkBrown,
           title: Text(exercise.title ?? ''),
           centerTitle: true,
+          actions: [
+            GetBuilder<HomeController>(
+                id: 'favourites',
+                builder: (controller) {
+                  bool isFavourite = homeController.favouritesExercises == null
+                      ? false
+                      : homeController.favouritesExercises!.value
+                          .every((element) {
+                          return element.id != exercise.id;
+                        });
+                  return IconButton(
+                    onPressed: () {
+                      if (isFavourite) {
+                        homeController.update(['favourites']);
+                        controller.addFavourite(exercise: exercise);
+                      } else {
+                        homeController.update(['favourites']);
+                        controller.removeFavourite(exercise: exercise);
+                      }
+                    },
+                    icon: controller.isFavouriteLoading.value
+                        ? SizedBox(
+                            height: 5.w,
+                            width: 5.w,
+                            child: Center(
+                              child: CircularProgressIndicator(
+                                color: Colors.white,
+                                strokeWidth: 0.5.w,
+                              ),
+                            ),
+                          )
+                        : isFavourite
+                            ? const Icon(
+                                Icons.bookmark_outline,
+                                color: Colors.white,
+                              )
+                            : const Icon(
+                                Icons.bookmark,
+                                color: Colors.white,
+                              ),
+                  );
+                }),
+          ],
         ),
         body: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
@@ -170,7 +217,7 @@ class DetailedExerciseView extends GetView<DetailedExerciseController> {
           ),
           child: ElevatedButton(
             onPressed: () {
-              controller.onExerciseStarted(exercise.timeToComplete!);
+              controller.onExerciseStarted(exercise.timeToComplete!, exercise);
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: darkBrown,
@@ -193,7 +240,8 @@ class DetailedExerciseView extends GetView<DetailedExerciseController> {
 }
 
 class CountDownDialog extends StatelessWidget {
-  const CountDownDialog({super.key});
+  final Exercise e;
+  const CountDownDialog({super.key, required this.e});
 
   @override
   Widget build(BuildContext context) {
@@ -235,7 +283,9 @@ class CountDownDialog extends StatelessWidget {
               height: 2.h,
             ),
             TextButton(
-              onPressed: controller.onExerciseCompleted,
+              onPressed: () async {
+                await controller.onExerciseCompleted(exercise: e);
+              },
               child: Container(
                 padding: EdgeInsets.symmetric(
                   horizontal: 7.w,

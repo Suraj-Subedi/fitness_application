@@ -21,7 +21,15 @@ String formatImageUrl(String imageUrl) {
 
 String getAvatar({required String name, Color? color}) {
   var splitName = name.split(' ');
-  return 'https://ui-avatars.com/api/?name=${splitName.first.characters}&length=2&format=png&rounded=true&size=256&background=${color ?? 'D4A373'}&color=${color ?? 'FFFFFF'}';
+  return 'http://ui-avatars.com/api/?name=${splitName.first.characters}&length=2&format=png&rounded=true&size=256&background=${color ?? 'D4A373'}&color=${color ?? 'FFFFFF'}';
+}
+
+String formatToK(int number) {
+  if (number >= 1000) {
+    return '${(number / 1000).toStringAsFixed(1)}K';
+  } else {
+    return number.toString();
+  }
 }
 
 String? getFormattedDate(DateTime? date) {

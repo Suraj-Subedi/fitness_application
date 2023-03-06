@@ -15,6 +15,7 @@ class SearchView extends GetView<SearchController> {
   const SearchView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
+    var controller = Get.put(SearchController());
     return Scaffold(
       body: SingleChildScrollView(
         child: Container(
@@ -98,7 +99,7 @@ class SearchView extends GetView<SearchController> {
               SizedBox(
                 height: 2.h,
               ),
-              Container(
+              SizedBox(
                 height: 40.w,
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
@@ -110,10 +111,15 @@ class SearchView extends GetView<SearchController> {
                     if ((homeController.exercises?.value.data?.length ?? 0) <
                         3) {
                       return SizedBox(
-                        width: 40.w,
-                        child: const Center(
-                          child: Text(
-                              'Very little exercies to calculate trending'),
+                        width: 80.w,
+                        child: Center(
+                          child: SizedBox(
+                            width: 60.w,
+                            child: const Text(
+                              'No trending workouts available at the moment',
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
                         ),
                       );
                     } else {

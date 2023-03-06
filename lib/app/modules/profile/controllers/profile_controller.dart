@@ -1,3 +1,4 @@
+import 'package:fitness_app/app/components/search_box.dart';
 import 'package:fitness_app/app/models/api_response.dart';
 import 'package:fitness_app/app/models/user.dart';
 import 'package:fitness_app/app/routes/app_pages.dart';
@@ -43,6 +44,7 @@ class ProfileController extends GetxController {
       } else if (data is User) {
         user = data.obs;
         mapUserData();
+        homeController.mapFavExercises();
         update(['profile']);
       }
     } catch (e) {

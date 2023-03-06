@@ -1,6 +1,8 @@
 import 'package:get/get.dart';
 
 import '../middlewares/auth_middleware.dart';
+import '../modules/change_password/bindings/change_password_binding.dart';
+import '../modules/change_password/views/change_password_view.dart';
 import '../modules/detailed_exercise/bindings/detailed_exercise_binding.dart';
 import '../modules/detailed_exercise/views/detailed_exercise_view.dart';
 import '../modules/edit_profile/bindings/edit_profile_binding.dart';
@@ -81,6 +83,11 @@ class AppPages {
       name: _Paths.DETAILED_EXERCISE,
       page: () => const DetailedExerciseView(),
       binding: DetailedExerciseBinding(),
+    ),
+    GetPage(
+      name: _Paths.CHANGE_PASSWORD,
+      page: () => const ChangePasswordView(),
+      binding: ChangePasswordBinding(),
     ),
   ];
 }

@@ -13,6 +13,20 @@ abstract class Services {
     required double weight,
   });
   Future getExercises();
+  Future addEerciseLog({
+    required String exerciseId,
+    required int timeToComplete,
+    required int calories,
+    required String title,
+  });
+
+  Future changePassword({
+    required String email,
+    required String oldPassword,
+    required String newPassword,
+  });
+
+  Future getStatsById({required bool isThisWeek});
 
   Future addToFavourites({required String exerciseId});
   Future removeFromFavourites({required String exerciseId});

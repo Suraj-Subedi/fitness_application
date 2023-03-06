@@ -80,6 +80,7 @@ class MemoryManagement {
 
   static Future<void> logOut() async {
     removeAccessToken();
+    clearRecentSearches();
     setLoginStatus(status: false);
   }
 }

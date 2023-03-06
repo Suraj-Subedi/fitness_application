@@ -2,6 +2,7 @@ import 'package:dio/dio.dart' as d;
 import 'package:dio/dio.dart';
 import 'package:fitness_app/app/models/api_response.dart';
 import 'package:fitness_app/app/models/exercises.dart';
+import 'package:fitness_app/app/models/stats.dart';
 import 'package:fitness_app/app/models/user.dart';
 import 'package:fitness_app/app/network/api_endpoints.dart';
 import 'package:fitness_app/app/network/api_handler.dart';
@@ -95,14 +96,94 @@ class AppServices implements Services {
   }
 
   @override
-  Future addToFavourites({required String exerciseId}) {
-    // TODO: implement addToFavourites
-    throw UnimplementedError();
+  Future addToFavourites({required String exerciseId}) async {
+    var res = await ApiHandler.hitApi(
+        dio.put(APIs.favourites + MemoryManagement.getUserId()!, data: {
+      "exercise": exerciseId,
+    }));
+
+    if (res is Response && res.statusCode == 200) {
+      return ApiResponse(isSucces: true, message: 'Added to favourites');
+    } else {
+      return ApiResponse(
+          isSucces: false,
+          message: res.data['message'] ?? 'Something went wrong');
+    }
   }
 
   @override
-  Future removeFromFavourites({required String exerciseId}) {
-    // TODO: implement removeFromFavourites
-    throw UnimplementedError();
+  Future removeFromFavourites({required String exerciseId}) async {
+    var res = await ApiHandler.hitApi(
+        dio.delete(APIs.favourites + MemoryManagement.getUserId()!, data: {
+      "exercise": exerciseId,
+    }));
+
+    if (res is Response && res.statusCode == 200) {
+      return ApiResponse(isSucces: true, message: 'Removed from favourites');
+    } else {
+      return ApiResponse(
+          isSucces: false,
+          message: res.data['message'] ?? 'Something went wrong');
+    }
+  }
+
+  @override
+  Future addEerciseLog(
+      {required String exerciseId,
+      required int timeToComplete,
+      required int calories,
+      required String title}) async {
+    final res = await ApiHandler.hitApi(
+        dio.post(APIs.exerciseLog + MemoryManagement.getUserId()!, data: {
+      "title": title,
+      "exerciseId": exerciseId,
+      "timeToComplete": timeToComplete,
+      "calories": calories,
+    }));
+
+    if (res is Response && res.statusCode == 200) {
+      return ApiResponse(
+          isSucces: true, message: 'Exercise completed successfully');
+    } else {
+      return ApiResponse(
+          isSucces: false,
+          message: res.data['message'] ?? 'Something went wrong');
+    }
+  }
+
+  @override
+  Future getStatsById({required bool isThisWeek}) async {
+    final res = await ApiHandler.hitApi(
+      dio.get(APIs.stats + MemoryManagement.getUserId()!,
+          queryParameters: {"range": isThisWeek ? "week" : "allTime"}),
+    );
+    if (res is Response && res.statusCode == 200) {
+      return Stats.fromJson(res.data);
+    } else {
+      return ApiResponse(isSucces: false, message: 'Something went wrong');
+    }
+  }
+
+  @override
+  Future changePassword({
+    required String oldPassword,
+    required String newPassword,
+    required String email,
+  }) async {
+    final res = await ApiHandler.hitApi(
+        dio.post(APIs.changePassword + MemoryManagement.getUserId()!, data: {
+      "email": email,
+      "password": oldPassword,
+      "newPassword": newPassword,
+    }));
+
+    if (res is Response && res.statusCode == 200) {
+      return ApiResponse(
+          isSucces: true, message: 'Password changed successfully');
+    } else {
+      return ApiResponse(
+          isSucces: false,
+          message: res.data['message'] ?? 'Something went wrong');
+    }
   }
 }

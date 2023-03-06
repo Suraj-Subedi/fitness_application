@@ -7,6 +7,7 @@ class Assets {
   static const loginLottieDoodle = 'assets/lottie/login_doodle.json';
   static const clockLottie = 'assets/lottie/clock.json';
   static const notFoundLottie = 'assets/lottie/not_found.json';
+  static const noFavLottie = 'assets/lottie/no_fav.json';
 
   /// Test files only, to be removed
 

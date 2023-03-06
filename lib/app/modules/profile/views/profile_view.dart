@@ -2,6 +2,7 @@ import 'package:fitness_app/app/components/custom_textButton.dart';
 import 'package:fitness_app/app/components/custom_textfield.dart';
 import 'package:fitness_app/app/routes/app_pages.dart';
 import 'package:fitness_app/app/utils/assets.dart';
+import 'package:fitness_app/app/utils/colors.dart';
 import 'package:fitness_app/app/utils/constants.dart';
 import 'package:flutter/material.dart';
 
@@ -26,6 +27,58 @@ class ProfileView extends GetView<ProfileController> {
           fontSize: 14.sp,
           fontWeight: FontWeight.w600,
         ),
+        // actions: [
+        //   PopupMenuButton(
+        //       shadowColor: Colors.black,
+        //       elevation: 5,
+        //       color: lightBrown,
+        //       icon: const Icon(
+        //         Icons.settings,
+        //         color: Colors.black,
+        //       ),
+        //       itemBuilder: (context) {
+        //         var style = TextStyle(color: Colors.black);
+        //         return [
+        //           PopupMenuItem(
+        //             child: TextButton(
+        //               onPressed: () async {
+        //                 Get.back();
+        //                 await Get.toNamed(Routes.EDIT_PROFILE,
+        //                     arguments: controller.user?.value.data);
+        //               },
+        //               child: Text(
+        //                 'Edit Profile',
+        //                 style: style,
+        //               ),
+        //             ),
+        //           ),
+        //           PopupMenuItem(
+        //             child: TextButton(
+        //               onPressed: () {
+        //                 Get.back();
+        //                 // Get.toNamed(Routes.CHANGE_PASSWORD);
+        //               },
+        //               child: Text(
+        //                 'Change Password',
+        //                 style: style,
+        //               ),
+        //             ),
+        //           ),
+        //           PopupMenuItem(
+        //             child: TextButton(
+        //               onPressed: () {
+        //                 Get.back();
+        //                 controller.onLogout();
+        //               },
+        //               child: Text(
+        //                 'Logout',
+        //                 style: style,
+        //               ),
+        //             ),
+        //           ),
+        //         ];
+        //       })
+        // ],
       ),
       body: SafeArea(
         child: GetBuilder<ProfileController>(
@@ -51,6 +104,7 @@ class ProfileView extends GetView<ProfileController> {
                         child: Hero(
                           tag: 'profilePic',
                           child: CircleAvatar(
+                            backgroundColor: Color(0xffD4A373),
                             backgroundImage: NetworkImage(
                                 getAvatar(name: data?.fullName ?? 'User')),
                             radius: 18.w,
@@ -67,15 +121,57 @@ class ProfileView extends GetView<ProfileController> {
                           fontWeight: FontWeight.w600,
                         ),
                       ),
-                      TextButton(
-                        onPressed: () async {
-                          await Get.toNamed(Routes.EDIT_PROFILE,
-                              arguments: data);
-                        },
-                        child: const Text(
-                          'Edit Profile',
-                          style: TextStyle(color: Colors.blue),
-                        ),
+                      SizedBox(
+                        height: 2.h,
+                      ),
+                      Row(
+                        children: [
+                          Expanded(
+                            flex: 2,
+                            child: TextButton(
+                              onPressed: () async {
+                                await Get.toNamed(Routes.EDIT_PROFILE,
+                                    arguments: data);
+                              },
+                              child: Container(
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: 5.w,
+                                  vertical: 1.h,
+                                ),
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.blue),
+                                  borderRadius: BorderRadius.circular(5),
+                                ),
+                                child: const Text(
+                                  'Edit Profile',
+                                  style: TextStyle(color: Colors.blue),
+                                ),
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                              flex: 3,
+                              child: TextButton(
+                                onPressed: () async {
+                                  await Get.toNamed(Routes.CHANGE_PASSWORD,
+                                      arguments: data);
+                                },
+                                child: Container(
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: 5.w,
+                                    vertical: 1.h,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    border: Border.all(color: Colors.blue),
+                                    borderRadius: BorderRadius.circular(5),
+                                  ),
+                                  child: const Text(
+                                    'Change Password',
+                                    style: TextStyle(color: Colors.blue),
+                                  ),
+                                ),
+                              )),
+                        ],
                       ),
                       SizedBox(
                         height: 2.h,

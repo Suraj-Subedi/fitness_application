@@ -30,44 +30,49 @@ class HomeView extends GetView<HomeController> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                          'Hello ${controller.profileController.user?.value.data?.fullName}'),
-                      Text(
-                        'Lets Workout',
-                        style: TextStyle(
-                          fontSize: 14.sp,
-                          fontWeight: FontWeight.bold,
+              GetBuilder<ProfileController>(
+                  id: 'profile',
+                  builder: (controller) {
+                    return Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                                'Hello ${controller.user?.value.data?.fullName ?? "User"}'),
+                            Text(
+                              'Lets Workout',
+                              style: TextStyle(
+                                fontSize: 14.sp,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
                         ),
-                      ),
-                    ],
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      mainController.persistentTabController.jumpToTab(3);
-                    },
-                    child: GetBuilder<ProfileController>(
-                      id: 'profile',
-                      builder: (controller) {
-                        return CircleAvatar(
-                          backgroundColor: Colors.white,
-                          radius: 5.w,
-                          backgroundImage: NetworkImage(
-                            getAvatar(
-                                name: controller.user?.value.data?.fullName ??
-                                    ''),
+                        GestureDetector(
+                          onTap: () {
+                            mainController.persistentTabController.jumpToTab(3);
+                          },
+                          child: GetBuilder<ProfileController>(
+                            id: 'profile',
+                            builder: (controller) {
+                              return CircleAvatar(
+                                backgroundColor: Colors.white,
+                                radius: 5.w,
+                                backgroundImage: NetworkImage(
+                                  getAvatar(
+                                      name: controller
+                                              .user?.value.data?.fullName ??
+                                          ''),
+                                ),
+                              );
+                            },
                           ),
-                        );
-                      },
-                    ),
-                  ),
-                ],
-              ),
+                        ),
+                      ],
+                    );
+                  }),
               SizedBox(
                 height: 2.h,
               ),
@@ -77,30 +82,82 @@ class HomeView extends GetView<HomeController> {
               SizedBox(
                 height: 2.h,
               ),
-              Text(
-                'Previous week results',
-                style: TextStyle(
-                  fontSize: 12.sp,
-                  fontWeight: FontWeight.bold,
-                ),
+              Obx(
+                () => DropdownButton(
+                    elevation: 0,
+                    borderRadius: BorderRadius.circular(2.w),
+                    value: controller.selectThisWeek.value,
+                    items: [
+                      DropdownMenuItem(
+                        value: true,
+                        child: Text(
+                          'This week',
+                          style: TextStyle(
+                            fontSize: 12.sp,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      DropdownMenuItem(
+                        value: false,
+                        child: Text(
+                          'All time',
+                          style: TextStyle(
+                            fontSize: 12.sp,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ],
+                    onChanged: (value) async {
+                      controller.selectThisWeek.value = value as bool;
+                      await controller.getStats();
+                      controller.update(['stats']);
+                    }),
               ),
-              SizedBox(
-                height: 45.w,
-                child: ListView.builder(
-                  itemCount: 3,
-                  scrollDirection: Axis.horizontal,
-                  itemBuilder: (context, index) {
-                    return Padding(
-                      padding: EdgeInsets.only(right: 2.w),
-                      child: StatTile(
-                        index: index,
-                        data: '12',
-                        title: 'Exercises',
+              GetBuilder<HomeController>(
+                  id: 'stats',
+                  builder: (controller) {
+                    if (controller.selectThisWeek.value
+                        ? controller.thisWeek == null
+                        : controller.allTime == null) {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
+                    return SizedBox(
+                      height: 45.w,
+                      child: ListView.builder(
+                        itemCount: 2,
+                        scrollDirection: Axis.horizontal,
+                        itemBuilder: (context, index) {
+                          var current = controller.selectThisWeek.value
+                              ? controller.thisWeek?.value.data?.first
+                              : controller.allTime?.value.data?.first;
+                          var listData = [
+                            {
+                              'title': 'Workouts',
+                              'data':
+                                  formatToK(current!.totalExerciseLogs ?? 0),
+                            },
+                            {
+                              'title': 'Calories burned',
+                              'data':
+                                  formatToK(current.totalCaloriesBurned ?? 0)
+                            }
+                          ];
+                          return Padding(
+                            padding: EdgeInsets.only(right: 2.w),
+                            child: StatTile(
+                              index: index,
+                              data: listData[index]['data'].toString(),
+                              title: listData[index]['title'] as String,
+                            ),
+                          );
+                        },
                       ),
                     );
-                  },
-                ),
-              ),
+                  }),
               SizedBox(
                 height: 2.h,
               ),
@@ -129,10 +186,12 @@ class HomeView extends GetView<HomeController> {
                       );
                     }
                     return SizedBox(
-                      height: 92.h,
                       child: ListView.builder(
+                        shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
-                        itemCount: controller.exercises!.value.data!.length,
+                        itemCount: controller.exercises!.value.data!.length > 5
+                            ? 2
+                            : controller.exercises!.value.data!.length,
                         itemBuilder: (context, index) {
                           return Padding(
                             padding: EdgeInsets.only(

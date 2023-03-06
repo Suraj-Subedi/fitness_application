@@ -6,4 +6,8 @@ class APIs {
   static const String register = "/auth/register";
   static String updateUserDetails = "/users/";
   static String exercises = "/exercises";
+  static String exerciseLog = "/exercise_log/";
+  static String stats = "/exercise_log/stats/";
+  static String favourites = "/fav/";
+  static String changePassword = "/auth/changePassword/";
 }
