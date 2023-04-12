@@ -57,14 +57,21 @@ class HomeView extends GetView<HomeController> {
                           child: GetBuilder<ProfileController>(
                             id: 'profile',
                             builder: (controller) {
-                              return CircleAvatar(
-                                backgroundColor: Colors.white,
-                                radius: 5.w,
-                                backgroundImage: NetworkImage(
-                                  getAvatar(
-                                      name: controller
-                                              .user?.value.data?.fullName ??
-                                          ''),
+                              return Container(
+                                height: 10.w,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                ),
+                                child: Image(
+                                  image: NetworkImage(
+                                    getAvatar(
+                                        name: controller
+                                                .user?.value.data?.fullName ??
+                                            ''),
+                                  ),
+                                  errorBuilder: (context, error, stackTrace) {
+                                    return const Icon(Icons.error);
+                                  },
                                 ),
                               );
                             },
@@ -132,18 +139,24 @@ class HomeView extends GetView<HomeController> {
                         scrollDirection: Axis.horizontal,
                         itemBuilder: (context, index) {
                           var current = controller.selectThisWeek.value
-                              ? controller.thisWeek?.value.data?.first
-                              : controller.allTime?.value.data?.first;
+                              ? controller.thisWeek?.value.data?.isEmpty ?? true
+                                  ? null
+                                  : controller.thisWeek?.value.data?.first
+                              : controller.allTime?.value.data?.isEmpty ?? true
+                                  ? null
+                                  : controller.allTime?.value.data?.first;
                           var listData = [
                             {
                               'title': 'Workouts',
-                              'data':
-                                  formatToK(current!.totalExerciseLogs ?? 0),
+                              'data': formatToK(current == null
+                                  ? 0
+                                  : current.totalExerciseLogs ?? 0),
                             },
                             {
                               'title': 'Calories burned',
-                              'data':
-                                  formatToK(current.totalCaloriesBurned ?? 0)
+                              'data': formatToK(current == null
+                                  ? 0
+                                  : current.totalCaloriesBurned ?? 0)
                             }
                           ];
                           return Padding(

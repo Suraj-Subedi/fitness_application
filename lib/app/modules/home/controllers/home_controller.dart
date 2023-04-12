@@ -113,8 +113,10 @@ class HomeController extends GetxController {
       } else {
         isThisWeek ? thisWeek = null : allTime = null;
       }
+    } catch (e) {
+    } finally {
       update(['stats']);
-    } catch (e) {}
+    }
   }
 
   void increment() => count.value++;

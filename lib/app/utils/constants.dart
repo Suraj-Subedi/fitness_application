@@ -15,13 +15,13 @@ void showCustomSnackBar({required String message, int? milliseconds}) {
 }
 
 String formatImageUrl(String imageUrl) {
-  var url = '${APIs.ipAddress}/$imageUrl';
+  var url = 'http://${APIs.ipAddress}/$imageUrl';
   return url;
 }
 
 String getAvatar({required String name, Color? color}) {
   var splitName = name.split(' ');
-  return 'http://ui-avatars.com/api/?name=${splitName.first.characters}&length=2&format=png&rounded=true&size=256&background=${color ?? 'D4A373'}&color=${color ?? 'FFFFFF'}';
+  return 'https://ui-avatars.com/api/?name=${splitName.first.characters}&length=2&format=png&rounded=true&size=256&background=${color ?? 'D4A373'}&color=${color ?? 'FFFFFF'}';
 }
 
 String formatToK(int number) {

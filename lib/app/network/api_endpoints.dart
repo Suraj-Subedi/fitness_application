@@ -1,6 +1,6 @@
 class APIs {
-  static const String ipAddress = "http://192.168.1.70:5000";
-  static const String baseUrl = "$ipAddress/api";
+  static const String ipAddress = "192.168.1.70:5001";
+  static const String baseUrl = "http://$ipAddress/api";
   static const String login = "/auth/login";
   static String getUserDetails = "/users/find/";
   static const String register = "/auth/register";

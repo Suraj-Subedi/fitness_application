@@ -158,6 +158,7 @@ class AppServices implements Services {
           queryParameters: {"range": isThisWeek ? "week" : "allTime"}),
     );
     if (res is Response && res.statusCode == 200) {
+      print(res.data);
       return Stats.fromJson(res.data);
     } else {
       return ApiResponse(isSucces: false, message: 'Something went wrong');
